@@ -1,0 +1,47 @@
+export const ROLES = {
+  STUDENT: 'STUDENT',
+  COORDINATOR: 'COORDINATOR',
+  ADMIN: 'ADMIN',
+};
+
+export const APPLICATION_STATUS = {
+  APPLIED: 'Applied',
+  SHORTLISTED: 'Shortlisted',
+  ONLINE_ASSESSMENT_SCHEDULED: 'Online Assessment Scheduled',
+  ONLINE_ASSESSMENT_CLEARED: 'Online Assessment Cleared',
+  INTERVIEW_ROUND_1: 'Interview Round 1',
+  INTERVIEW_ROUND_2: 'Interview Round 2',
+  HR_ROUND: 'HR Round',
+  SELECTED: 'Selected',
+  REJECTED: 'Rejected',
+};
+
+export const APPLICATION_STATUS_FLOW = [
+  APPLICATION_STATUS.APPLIED,
+  APPLICATION_STATUS.SHORTLISTED,
+  APPLICATION_STATUS.ONLINE_ASSESSMENT_SCHEDULED,
+  APPLICATION_STATUS.ONLINE_ASSESSMENT_CLEARED,
+  APPLICATION_STATUS.INTERVIEW_ROUND_1,
+  APPLICATION_STATUS.INTERVIEW_ROUND_2,
+  APPLICATION_STATUS.HR_ROUND,
+  APPLICATION_STATUS.SELECTED,
+  APPLICATION_STATUS.REJECTED,
+];
+
+export const DRIVE_STATUS = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+};
+
+export const JOB_TYPES = ['Full-Time', 'Internship', 'Contract'];
+
+export const INTERVIEW_MODES = ['Online', 'Offline'];
+
+export const INTERVIEW_RESULTS = ['Pending', 'Passed', 'Failed', 'Cancelled'];
+
+export const NOTIFICATION_TYPES = {
+  NEW_DRIVE: 'New Drive Posted',
+  INTERVIEW_SCHEDULED: 'Interview Scheduled',
+  APPLICATION_STATUS_UPDATED: 'Application Status Updated',
+  PROFILE_SYNC_COMPLETED: 'Profile Sync Completed',
+};
