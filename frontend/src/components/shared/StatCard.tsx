@@ -20,12 +20,13 @@ export function StatCard({ title, value, icon: Icon, trend, subtitle, className 
       whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
     >
-      <Card className={cn('hover:border-accent/30 transition-colors duration-200', className)}>
-        <CardContent className="p-5">
+      <Card className={cn('card-hover overflow-hidden relative group', className)}>
+        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        <CardContent className="p-5 relative">
           <div className="flex items-start justify-between">
             <div className="space-y-2">
-              <p className="text-sm text-text-secondary">{title}</p>
-              <p className="text-2xl font-bold tracking-tight">{value}</p>
+              <p className="text-sm text-text-secondary font-medium">{title}</p>
+              <p className="text-3xl font-bold tracking-tight">{value}</p>
               {subtitle && <p className="text-xs text-text-secondary">{subtitle}</p>}
               {trend !== undefined && (
                 <div className={cn('flex items-center gap-1 text-xs font-medium', {
@@ -34,11 +35,11 @@ export function StatCard({ title, value, icon: Icon, trend, subtitle, className 
                   'text-text-secondary': trend === 0,
                 })}>
                   {trend > 0 ? <TrendingUp className="h-3 w-3" /> : trend < 0 ? <TrendingDown className="h-3 w-3" /> : <Minus className="h-3 w-3" />}
-                  {Math.abs(trend)}% vs last month
+                  <span>{trend > 0 ? '+' : ''}{Math.abs(trend)}% vs last month</span>
                 </div>
               )}
             </div>
-            <div className="rounded-lg bg-accent/10 p-2.5">
+            <div className="rounded-xl bg-gradient-to-br from-accent/20 to-accent/5 p-3 group-hover:scale-110 transition-transform duration-300">
               <Icon className="h-5 w-5 text-accent" />
             </div>
           </div>

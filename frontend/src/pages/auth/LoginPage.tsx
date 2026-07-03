@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { motion } from 'framer-motion'
-import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Eye, EyeOff, Loader2, ArrowLeft, Mail, Lock } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,7 +13,7 @@ import { authApi } from '@/services'
 import { useAuthStore } from '@/stores/authStore'
 
 const schema = z.object({
-  email: z.string().email('Valid email required'),
+  email: z.string().email('Please enter a valid email'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 })
 
@@ -39,7 +39,7 @@ export default function LoginPage() {
       const redirect = user.role === 'ADMIN' ? '/admin' : user.role === 'COORDINATOR' ? '/coordinator' : '/student'
       navigate(redirect)
     } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Login failed'
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Invalid credentials'
       toast.error(msg)
     } finally {
       setLoading(false)
@@ -47,49 +47,140 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--color-accent)_0%,_transparent_50%)] opacity-5" />
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md glass-card rounded-2xl p-8"
-      >
-        <div className="text-center mb-8">
-          <Link to="/" className="text-2xl font-bold text-accent">PlaceTrack Pro</Link>
-          <p className="text-text-secondary mt-2">Sign in to your account</p>
-        </div>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="you@college.edu" className="mt-1.5" {...register('email')} />
-            {errors.email && <p className="text-danger text-xs mt-1">{errors.email.message}</p>}
-          </div>
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <div className="relative mt-1.5">
-              <Input id="password" type={showPass ? 'text' : 'password'} placeholder="••••••••" {...register('password')} />
-              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary">
-                {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
+    <div className="min-h-screen flex bg-background">
+      {/* Left Panel - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-background to-background" />
+        <div className="absolute inset-0 grid-pattern opacity-30" />
+        <div className="relative z-10 flex flex-col justify-between p-12">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center">
+              <span className="text-white font-bold text-lg">P</span>
             </div>
-            {errors.password && <p className="text-danger text-xs mt-1">{errors.password.message}</p>}
+            <span className="text-2xl font-bold">PlaceTrack<span className="text-accent">Pro</span></span>
+          </Link>
+          
+          <div className="space-y-6">
+            <h1 className="text-4xl font-bold leading-tight">
+              Track your placement <br />
+              <span className="gradient-accent">journey seamlessly</span>
+            </h1>
+            <p className="text-text-secondary text-lg max-w-md">
+              Join thousands of students managing their applications, interviews, and coding profiles in one place.
+            </p>
+            <div className="flex items-center gap-4 pt-4">
+              <div className="flex -space-x-3">
+                {['RS', 'PK', 'AM', 'VS'].map((initials, i) => (
+                  <div key={i} className="h-10 w-10 rounded-full bg-gradient-to-br from-accent/80 to-accent-hover border-2 border-background flex items-center justify-center text-white text-xs font-medium">
+                    {initials}
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-text-secondary">
+                <span className="font-semibold text-text-primary">10,000+</span> students already onboard
+              </p>
+            </div>
           </div>
 
-          <div className="flex justify-end">
-            <Link to="/forgot-password" className="text-sm text-accent hover:underline">Forgot password?</Link>
+          <p className="text-text-secondary text-sm">
+            © 2026 PlaceTrack Pro. All rights reserved.
+          </p>
+        </div>
+      </div>
+
+      {/* Right Panel - Form */}
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-md"
+        >
+          <Link to="/" className="lg:hidden flex items-center gap-2 mb-8">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center">
+              <span className="text-white font-bold text-sm">P</span>
+            </div>
+            <span className="text-xl font-bold">PlaceTrack<span className="text-accent">Pro</span></span>
+          </Link>
+
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-accent transition-colors mb-8">
+            <ArrowLeft className="h-4 w-4" /> Back to home
+          </Link>
+
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold mb-2">Welcome back</h2>
+            <p className="text-text-secondary">Enter your credentials to access your account</p>
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Signing in...</> : 'Sign In'}
-          </Button>
-        </form>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary" />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="you@college.edu" 
+                  className="pl-10 h-12" 
+                  {...register('email')} 
+                />
+              </div>
+              {errors.email && <p className="text-danger text-xs">{errors.email.message}</p>}
+            </div>
 
-        <p className="text-center text-sm text-text-secondary mt-6">
-          Don't have an account?{' '}
-          <Link to="/signup" className="text-accent hover:underline">Create account</Link>
-        </p>
-      </motion.div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Password</Label>
+                <Link to="/forgot-password" className="text-xs text-accent hover:underline">Forgot password?</Link>
+              </div>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary" />
+                <Input 
+                  id="password" 
+                  type={showPass ? 'text' : 'password'} 
+                  placeholder="••••••••" 
+                  className="pl-10 pr-10 h-12"
+                  {...register('password')} 
+                />
+                <button 
+                  type="button" 
+                  onClick={() => setShowPass(!showPass)} 
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary transition-colors"
+                >
+                  {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+              {errors.password && <p className="text-danger text-xs">{errors.password.message}</p>}
+            </div>
+
+            <Button type="submit" className="w-full h-12 text-base" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </Button>
+          </form>
+
+          <div className="mt-8 text-center">
+            <p className="text-text-secondary text-sm">
+              Don't have an account?{' '}
+              <Link to="/signup" className="text-accent font-medium hover:underline">Create account</Link>
+            </p>
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-border">
+            <p className="text-text-secondary text-xs text-center">
+              Demo Accounts:
+            </p>
+            <div className="mt-2 flex flex-wrap justify-center gap-2 text-xs">
+              <code className="px-2 py-1 rounded bg-surface text-text-secondary">admin@placetrack.edu / admin123</code>
+              <code className="px-2 py-1 rounded bg-surface text-text-secondary">coordinator@placetrack.edu / coord123</code>
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </div>
   )
 }

@@ -2,12 +2,13 @@ import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, User, FileText, Briefcase, Code2, BarChart3,
-  FileUp, Calendar, Bell, Settings, LogOut, Menu, ChevronLeft,
+  FileUp, Calendar, Bell, Settings, LogOut, Menu, ChevronLeft, Search,
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAuthStore } from '@/stores/authStore'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { cn, getInitials } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { notificationApi } from '@/services'
@@ -67,21 +68,34 @@ export function DashboardLayout({ navItems, portalLabel }: DashboardLayoutProps)
 
   const Sidebar = () => (
     <aside className={cn(
-      'flex flex-col h-full bg-surface border-r border-border transition-all duration-300',
-      collapsed ? 'w-16' : 'w-64'
+      'flex flex-col h-full bg-surface/50 backdrop-blur-sm border-r border-border transition-all duration-300',
+      collapsed ? 'w-[68px]' : 'w-64'
     )}>
-      <div className="flex items-center justify-between p-4 border-b border-border">
+      {/* Logo */}
+      <div className="flex items-center justify-between p-4 h-16 border-b border-border">
         {!collapsed && (
-          <div>
-            <span className="font-bold text-accent">PlaceTrack</span>
-            <span className="text-text-secondary text-xs block">{portalLabel}</span>
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center">
+              <span className="text-white font-bold text-sm">P</span>
+            </div>
+            <div>
+              <span className="font-bold text-sm">PlaceTrack</span>
+              <span className="text-accent font-bold text-sm">Pro</span>
+              <p className="text-text-secondary text-[10px] -mt-0.5">{portalLabel}</p>
+            </div>
           </div>
         )}
-        <Button variant="ghost" size="icon" onClick={() => setCollapsed(!collapsed)} className="hidden lg:flex">
+        {collapsed && (
+          <div className="h-8 w-8 mx-auto rounded-lg bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center">
+            <span className="text-white font-bold text-sm">P</span>
+          </div>
+        )}
+        <Button variant="ghost" size="icon" onClick={() => setCollapsed(!collapsed)} className="hidden lg:flex h-8 w-8">
           <ChevronLeft className={cn('h-4 w-4 transition-transform', collapsed && 'rotate-180')} />
         </Button>
       </div>
 
+      {/* Navigation */}
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         {navItems.map(({ to, icon: Icon, label, end }) => (
           <NavLink
@@ -90,37 +104,49 @@ export function DashboardLayout({ navItems, portalLabel }: DashboardLayoutProps)
             end={end}
             onClick={() => setMobileOpen(false)}
             className={({ isActive }) => cn(
-              'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
+              'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 relative group',
               isActive
-                ? 'bg-accent/10 text-accent border border-accent/20'
+                ? 'bg-accent/10 text-accent'
                 : 'text-text-secondary hover:text-text-primary hover:bg-muted'
             )}
           >
-            <Icon className="h-4 w-4 shrink-0" />
-            {!collapsed && <span>{label}</span>}
-            {!collapsed && label === 'Notifications' && unread ? (
-              <span className="ml-auto bg-accent text-white text-xs rounded-full px-1.5 py-0.5">{unread}</span>
-            ) : null}
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <motion.div
+                    layoutId="activeNav"
+                    className="absolute left-0 top-0 bottom-0 w-1 bg-accent rounded-full"
+                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <Icon className={cn('h-4 w-4 shrink-0', collapsed && 'mx-auto')} />
+                {!collapsed && <span>{label}</span>}
+                {!collapsed && label === 'Notifications' && unread ? (
+                  <span className="ml-auto bg-accent text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center">{unread}</span>
+                ) : null}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
 
+      {/* User Info */}
       <div className="p-3 border-t border-border">
-        <div className={cn('flex items-center gap-3', collapsed && 'justify-center')}>
-          <Avatar className="h-8 w-8">
+        <div className={cn('flex items-center gap-3 p-2 rounded-xl hover:bg-muted transition-colors', collapsed && 'justify-center')}>
+          <Avatar className="h-9 w-9 border border-border">
             <AvatarImage src="" />
-            <AvatarFallback className="bg-accent/20 text-accent text-xs">
+            <AvatarFallback className="bg-gradient-to-br from-accent/20 to-accent/5 text-accent text-xs font-bold">
               {user ? getInitials(user.name) : '?'}
             </AvatarFallback>
           </Avatar>
           {!collapsed && (
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">{user?.name}</p>
-              <p className="text-xs text-text-secondary truncate">{user?.role}</p>
+              <p className="text-xs text-text-secondary truncate">{user?.email}</p>
             </div>
           )}
           {!collapsed && (
-            <Button variant="ghost" size="icon" onClick={handleLogout}>
+            <Button variant="ghost" size="icon" onClick={handleLogout} className="h-8 w-8 text-text-secondary hover:text-danger">
               <LogOut className="h-4 w-4" />
             </Button>
           )}
@@ -131,33 +157,63 @@ export function DashboardLayout({ navItems, portalLabel }: DashboardLayoutProps)
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
+      {/* Desktop Sidebar */}
       <div className="hidden lg:flex">
         <Sidebar />
       </div>
 
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setMobileOpen(false)} />
-          <div className="absolute left-0 top-0 h-full w-64">
-            <Sidebar />
-          </div>
-        </div>
-      )}
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 lg:hidden"
+          >
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+            <motion.div
+              initial={{ x: -280 }}
+              animate={{ x: 0 }}
+              exit={{ x: -280 }}
+              transition={{ type: 'spring', bounce: 0, duration: 0.3 }}
+              className="absolute left-0 top-0 h-full w-64"
+            >
+              <Sidebar />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
+      {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface/50 backdrop-blur-sm lg:px-6">
-          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileOpen(true)}>
-            <Menu className="h-5 w-5" />
-          </Button>
-          <div className="flex-1" />
-          <Button variant="ghost" size="icon" onClick={() => navigate('/student/notifications')}>
-            <Bell className="h-5 w-5" />
-            {unread ? (
-              <span className="absolute top-2 right-2 h-2 w-2 bg-accent rounded-full" />
-            ) : null}
-          </Button>
+        {/* Top Header */}
+        <header className="flex items-center justify-between h-16 px-4 border-b border-border bg-surface/30 backdrop-blur-sm lg:px-6">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileOpen(true)}>
+              <Menu className="h-5 w-5" />
+            </Button>
+            <div className="hidden sm:flex relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary" />
+              <Input placeholder="Search..." className="pl-9 w-64 h-9 bg-muted border-0" />
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="relative"
+              onClick={() => navigate(navItems.find(n => n.label === 'Notifications')?.to || '#')}
+            >
+              <Bell className="h-5 w-5" />
+              {unread ? (
+                <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-accent rounded-full ring-2 ring-surface" />
+              ) : null}
+            </Button>
+          </div>
         </header>
 
+        {/* Page Content */}
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           <AnimatePresence mode="wait">
             <motion.div
@@ -165,7 +221,7 @@ export function DashboardLayout({ navItems, portalLabel }: DashboardLayoutProps)
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
             >
               <Outlet />
             </motion.div>
