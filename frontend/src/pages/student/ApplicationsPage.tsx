@@ -55,7 +55,13 @@ export default function ApplicationsPage() {
                       <td className="p-4 text-text-secondary">{formatDate(app.createdAt)}</td>
                       <td className="p-4"><StatusBadge status={app.status} /></td>
                       <td className="p-4">
-                        <Button variant="ghost" size="sm"><ExternalLink className="h-4 w-4" /></Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => navigate(`/student/applications/${app._id}`)}
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
                       </td>
                     </tr>
                   ))}

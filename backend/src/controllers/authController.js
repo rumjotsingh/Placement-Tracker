@@ -54,3 +54,26 @@ export const deactivateUser = asyncHandler(async (req, res) => {
   const user = await User.findByIdAndUpdate(req.params.id, { isActive: false }, { new: true });
   res.json(new ApiResponse(200, user, 'User deactivated'));
 });
+
+export const googleAuth = asyncHandler(async (req, res) => {
+  const { getGoogleAuthUrl } = await import('../services/googleAuthService.js');
+  const url = getGoogleAuthUrl();
+  res.redirect(url);
+});
+
+export const googleCallback = asyncHandler(async (req, res) => {
+  const { handleGoogleCallback } = await import('../services/googleAuthService.js');
+  const env = (await import('../config/env.js')).default;
+
+  try {
+    const { token, user } = await handleGoogleCallback(req.query.code);
+    const redirectUrl = new URL('/auth/google/callback', env.frontendUrl);
+    redirectUrl.searchParams.set('token', token);
+    redirectUrl.searchParams.set('role', user.role);
+    res.redirect(redirectUrl.toString());
+  } catch (error) {
+    const redirectUrl = new URL('/login', env.frontendUrl);
+    redirectUrl.searchParams.set('error', error.message || 'Google sign-in failed');
+    res.redirect(redirectUrl.toString());
+  }
+});

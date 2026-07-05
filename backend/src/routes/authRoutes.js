@@ -17,6 +17,8 @@ const router = Router();
 
 router.post('/register', registerValidator, validate, authController.register);
 router.post('/login', loginValidator, validate, authController.login);
+router.get('/google', authController.googleAuth);
+router.get('/google/callback', authController.googleCallback);
 router.post('/logout', authenticate, authController.logout);
 router.post('/forgot-password', forgotPasswordValidator, validate, authController.forgotPassword);
 router.post('/reset-password', resetPasswordValidator, validate, authController.resetPassword);

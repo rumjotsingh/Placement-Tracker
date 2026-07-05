@@ -17,6 +17,16 @@ export const syncCodeforces = asyncHandler(async (req, res) => {
   res.json(new ApiResponse(200, stats, 'Codeforces synced'));
 });
 
+export const syncCodeChef = asyncHandler(async (req, res) => {
+  const stats = await codingSyncService.syncCodeChef(req.user._id);
+  res.json(new ApiResponse(200, stats, 'CodeChef synced'));
+});
+
+export const syncGeeksforGeeks = asyncHandler(async (req, res) => {
+  const stats = await codingSyncService.syncGeeksforGeeks(req.user._id);
+  res.json(new ApiResponse(200, stats, 'GeeksforGeeks synced'));
+});
+
 export const syncAll = asyncHandler(async (req, res) => {
   const result = await codingSyncService.syncAllProfiles(req.user._id);
   res.json(new ApiResponse(200, result, 'All profiles synced'));

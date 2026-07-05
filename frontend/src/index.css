@@ -139,3 +139,21 @@ body {
     animation: none;
   }
 }
+
+/* react-day-picker v10 — keep days in a proper 7-column grid */
+.rdp-root .rdp-month_grid {
+  width: 100%;
+}
+
+.rdp-root .rdp-weekdays,
+.rdp-root .rdp-week {
+  display: flex;
+  width: 100%;
+}
+
+.rdp-root .rdp-weekday,
+.rdp-root .rdp-day {
+  flex: 0 0 2.25rem;
+  width: 2.25rem;
+  max-width: 2.25rem;
+}

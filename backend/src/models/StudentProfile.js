@@ -21,6 +21,8 @@ const studentProfileSchema = new mongoose.Schema(
     githubUsername: { type: String, trim: true },
     leetcodeUsername: { type: String, trim: true },
     codeforcesUsername: { type: String, trim: true },
+    codechefUsername: { type: String, trim: true },
+    geeksforgeeksUsername: { type: String, trim: true },
     profileImage: { type: String },
     profileImagePublicId: { type: String },
     portfolioSlug: { type: String, unique: true, sparse: true },

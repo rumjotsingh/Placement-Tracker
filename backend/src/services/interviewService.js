@@ -2,8 +2,8 @@ import Interview from '../models/Interview.js';
 import Application from '../models/Application.js';
 import ApiError from '../utils/ApiError.js';
 import { getPagination, paginateResponse } from '../utils/pagination.js';
+import { APPLICATION_STATUS, NOTIFICATION_TYPES } from '../constants/index.js';
 import { createNotification } from './notificationService.js';
-import { NOTIFICATION_TYPES } from '../constants/index.js';
 
 export const scheduleInterview = async (data, scheduledBy) => {
   const application = await Application.findById(data.application).populate('student', '_id name');
@@ -11,12 +11,25 @@ export const scheduleInterview = async (data, scheduledBy) => {
 
   const interview = await Interview.create({ ...data, scheduledBy });
 
+  if (
+    application.status === APPLICATION_STATUS.SHORTLISTED ||
+    application.status === APPLICATION_STATUS.ONLINE_ASSESSMENT_CLEARED
+  ) {
+    application.status = APPLICATION_STATUS.INTERVIEW_ROUND_1;
+    application.statusHistory.push({
+      status: APPLICATION_STATUS.INTERVIEW_ROUND_1,
+      changedAt: new Date(),
+      changedBy: scheduledBy,
+    });
+    await application.save();
+  }
+
   await createNotification({
     userId: application.student._id,
     type: NOTIFICATION_TYPES.INTERVIEW_SCHEDULED,
     title: 'Interview Scheduled',
     message: `Your interview is scheduled on ${new Date(data.date).toDateString()} at ${data.time}`,
-    link: `/interviews/${interview._id}`,
+    link: `/student/interviews`,
   });
 
   return interview.populate([

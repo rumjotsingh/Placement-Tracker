@@ -33,6 +33,8 @@ export const profileUpdateValidator = [
   body('githubUsername').optional().trim(),
   body('leetcodeUsername').optional().trim(),
   body('codeforcesUsername').optional().trim(),
+  body('codechefUsername').optional().trim(),
+  body('geeksforgeeksUsername').optional().trim(),
 ];
 
 export const companyValidator = [
@@ -51,6 +53,7 @@ export const driveValidator = [
   body('location').optional().trim(),
   body('deadline').isISO8601().withMessage('Valid deadline is required'),
   body('driveDate').isISO8601().withMessage('Valid drive date is required'),
+  body('description').optional().trim(),
   body('eligibilityCriteria.minCgpa').optional().isFloat({ min: 0, max: 10 }),
   body('eligibilityCriteria.eligibleBranches').optional().isArray(),
 ];

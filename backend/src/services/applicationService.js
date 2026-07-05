@@ -64,7 +64,7 @@ export const updateApplicationStatus = async (applicationId, status, changedBy) 
     type: NOTIFICATION_TYPES.APPLICATION_STATUS_UPDATED,
     title: 'Application Status Updated',
     message: `Your application status is now: ${status}`,
-    link: `/applications/${application._id}`,
+    link: `/student/applications/${application._id}`,
   });
 
   return application.populate([

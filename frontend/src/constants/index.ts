@@ -29,3 +29,5 @@ export const STATUS_COLORS: Record<string, string> = {
 }
 
 export const BRANCHES = ['CSE', 'IT', 'ECE', 'EEE', 'ME', 'CE', 'AI/ML', 'DS'] as const
+
+export const JOB_TYPES = ['Full-Time', 'Internship', 'Contract'] as const

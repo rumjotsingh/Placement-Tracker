@@ -6,6 +6,7 @@ import type {
   Resume,
   Company,
   PlacementDrive,
+  DriveEligibility,
   Application,
   Interview,
   CodingStats,
@@ -77,8 +78,11 @@ export const driveApi = {
   update: (id: string, data: Record<string, unknown>) =>
     api.put<ApiResponse<PlacementDrive>>(`/drives/${id}`, data),
   close: (id: string) => api.patch<ApiResponse<PlacementDrive>>(`/drives/${id}/close`),
+  delete: (id: string) => api.delete<ApiResponse<{ message: string }>>(`/drives/${id}`),
   getApplicants: (id: string, params?: Record<string, string>) =>
     api.get<ApiResponse<Paginated<Application>>>(`/drives/${id}/applicants`, { params }),
+  getEligibility: (id: string) =>
+    api.get<ApiResponse<DriveEligibility>>(`/drives/${id}/eligibility`),
 }
 
 export const applicationApi = {
@@ -92,6 +96,7 @@ export const applicationApi = {
     api.patch<ApiResponse<Application>>(`/applications/${id}/status`, { status }),
   list: (params?: Record<string, string>) =>
     api.get<ApiResponse<Paginated<Application>>>('/applications', { params }),
+  get: (id: string) => api.get<ApiResponse<Application>>(`/applications/${id}`),
 }
 
 export const interviewApi = {
@@ -113,6 +118,8 @@ export const codingApi = {
   syncGitHub: () => api.post<ApiResponse<CodingStats>>('/coding/sync/github'),
   syncLeetCode: () => api.post<ApiResponse<CodingStats>>('/coding/sync/leetcode'),
   syncCodeforces: () => api.post<ApiResponse<CodingStats>>('/coding/sync/codeforces'),
+  syncCodeChef: () => api.post<ApiResponse<CodingStats>>('/coding/sync/codechef'),
+  syncGeeksforGeeks: () => api.post<ApiResponse<CodingStats>>('/coding/sync/geeksforgeeks'),
   syncAll: () => api.post<ApiResponse<{ stats: CodingStats; errors: unknown[] }>>('/coding/sync/all'),
 }
 

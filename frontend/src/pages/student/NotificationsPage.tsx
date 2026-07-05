@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { Bell, CheckCheck } from 'lucide-react'
 import { notificationApi } from '@/services'
+import { useAuthStore } from '@/stores/authStore'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { Card, CardContent } from '@/components/ui/card'
@@ -24,6 +26,9 @@ function groupByDate(notifications: Notification[]) {
 
 export default function NotificationsPage() {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  const role = useAuthStore((s) => s.user?.role)
+  const portalPrefix = role === 'ADMIN' ? '/admin' : role === 'COORDINATOR' ? '/coordinator' : '/student'
 
   const { data, isLoading } = useQuery({
     queryKey: ['notifications'],
@@ -69,7 +74,13 @@ export default function NotificationsPage() {
                   <Card
                     key={n._id}
                     className={`cursor-pointer transition-colors hover:border-accent/30 ${!n.read ? 'border-accent/20 bg-accent/5' : ''}`}
-                    onClick={() => !n.read && markReadMutation.mutate(n._id)}
+                    onClick={() => {
+                      if (!n.read) markReadMutation.mutate(n._id)
+                      if (n.link) {
+                        const path = n.link.startsWith('/') ? n.link : `/${n.link}`
+                        navigate(path.startsWith('/student') || path.startsWith('/coordinator') || path.startsWith('/admin') ? path : `${portalPrefix}${path}`)
+                      }
+                    }}
                   >
                     <CardContent className="p-4 flex items-start gap-3">
                       <div className={`h-2 w-2 rounded-full mt-2 shrink-0 ${!n.read ? 'bg-accent' : 'bg-transparent'}`} />

@@ -16,6 +16,8 @@ router.put('/dsa', dsaUpdateValidator, validate, codingController.updateDSAProgr
 router.post('/sync/github', codingController.syncGitHub);
 router.post('/sync/leetcode', codingController.syncLeetCode);
 router.post('/sync/codeforces', codingController.syncCodeforces);
+router.post('/sync/codechef', codingController.syncCodeChef);
+router.post('/sync/geeksforgeeks', codingController.syncGeeksforGeeks);
 router.post('/sync/all', codingController.syncAll);
 
 export default router;

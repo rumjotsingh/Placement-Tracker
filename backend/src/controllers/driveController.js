@@ -31,3 +31,14 @@ export const getApplicants = asyncHandler(async (req, res) => {
   const result = await driveService.getDriveApplicants(req.params.id, req.query);
   res.json(new ApiResponse(200, result, 'Applicants fetched'));
 });
+
+export const getEligibility = asyncHandler(async (req, res) => {
+  const drive = await driveService.getDriveById(req.params.id);
+  const result = await driveService.evaluateEligibility(req.user._id, drive);
+  res.json(new ApiResponse(200, result, 'Eligibility evaluated'));
+});
+
+export const deleteDrive = asyncHandler(async (req, res) => {
+  const result = await driveService.deleteDrive(req.params.id);
+  res.json(new ApiResponse(200, result, 'Drive deleted'));
+});

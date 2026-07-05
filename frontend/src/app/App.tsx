@@ -8,11 +8,14 @@ import LandingPage from '@/pages/public/LandingPage'
 import LoginPage from '@/pages/auth/LoginPage'
 import SignupPage from '@/pages/auth/SignupPage'
 import ForgotPasswordPage from '@/pages/auth/ForgotPasswordPage'
+import GoogleCallbackPage from '@/pages/auth/GoogleCallbackPage'
 
 import StudentDashboard from '@/pages/student/StudentDashboard'
 import ProfilePage from '@/pages/student/ProfilePage'
 import ApplicationsPage from '@/pages/student/ApplicationsPage'
+import ApplicationDetailPage from '@/pages/student/ApplicationDetailPage'
 import DrivesPage from '@/pages/student/DrivesPage'
+import DriveDetailPage from '@/pages/student/DriveDetailPage'
 import CodingProfilesPage from '@/pages/student/CodingProfilesPage'
 import DSATrackerPage from '@/pages/student/DSATrackerPage'
 import ResumeVaultPage from '@/pages/student/ResumeVaultPage'
@@ -23,6 +26,9 @@ import SettingsPage from '@/pages/student/SettingsPage'
 import CoordinatorDashboard from '@/pages/coordinator/CoordinatorDashboard'
 import CompaniesPage from '@/pages/coordinator/CompaniesPage'
 import CoordinatorDrivesPage from '@/pages/coordinator/DrivesPage'
+import CoordinatorApplicationsPage from '@/pages/coordinator/ApplicationsPage'
+import CoordinatorInterviewsPage from '@/pages/coordinator/InterviewsPage'
+import DriveApplicantsPage from '@/pages/coordinator/DriveApplicantsPage'
 import StudentsPage from '@/pages/coordinator/StudentsPage'
 
 import AdminDashboard from '@/pages/admin/AdminDashboard'
@@ -38,6 +44,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
 
+          <Route path="/auth/google/callback" element={<GoogleCallbackPage />} />
+
           <Route element={<PublicRoute />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
@@ -49,7 +57,9 @@ export default function App() {
               <Route index element={<StudentDashboard />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="applications" element={<ApplicationsPage />} />
+              <Route path="applications/:id" element={<ApplicationDetailPage />} />
               <Route path="drives" element={<DrivesPage />} />
+              <Route path="drives/:id" element={<DriveDetailPage />} />
               <Route path="coding" element={<CodingProfilesPage />} />
               <Route path="dsa" element={<DSATrackerPage />} />
               <Route path="resume" element={<ResumeVaultPage />} />
@@ -64,9 +74,10 @@ export default function App() {
               <Route index element={<CoordinatorDashboard />} />
               <Route path="companies" element={<CompaniesPage />} />
               <Route path="drives" element={<CoordinatorDrivesPage />} />
+              <Route path="drives/:id/applicants" element={<DriveApplicantsPage />} />
               <Route path="students" element={<StudentsPage />} />
-              <Route path="applications" element={<ApplicationsPage />} />
-              <Route path="interviews" element={<InterviewsPage />} />
+              <Route path="applications" element={<CoordinatorApplicationsPage />} />
+              <Route path="interviews" element={<CoordinatorInterviewsPage />} />
               <Route path="notifications" element={<NotificationsPage />} />
             </Route>
           </Route>
@@ -75,6 +86,10 @@ export default function App() {
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="companies" element={<CompaniesPage />} />
+              <Route path="drives" element={<CoordinatorDrivesPage />} />
+              <Route path="drives/:id/applicants" element={<DriveApplicantsPage />} />
+              <Route path="applications" element={<CoordinatorApplicationsPage />} />
+              <Route path="interviews" element={<CoordinatorInterviewsPage />} />
               <Route path="users" element={<StudentsPage />} />
               <Route path="analytics" element={<AdminDashboard />} />
             </Route>

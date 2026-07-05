@@ -31,6 +31,8 @@ export const updateProfile = async (userId, updates) => {
     'githubUsername',
     'leetcodeUsername',
     'codeforcesUsername',
+    'codechefUsername',
+    'geeksforgeeksUsername',
   ];
 
   const data = {};

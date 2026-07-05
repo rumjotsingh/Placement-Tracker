@@ -19,6 +19,7 @@ export const registerStudent = async (data) => {
     name: data.name,
     email: data.email,
     password: data.password,
+    authProvider: 'local',
     role: ROLES.STUDENT,
     rollNumber: data.rollNumber,
     branch: data.branch,
@@ -46,6 +47,9 @@ export const loginUser = async (email, password) => {
   const user = await User.findOne({ email }).select('+password');
   if (!user) throw new ApiError(401, 'Invalid email or password');
   if (!user.isActive) throw new ApiError(403, 'Account is deactivated');
+  if (user.authProvider === 'google' && !user.password) {
+    throw new ApiError(400, 'This account uses Google sign-in. Please continue with Google.');
+  }
 
   const valid = await user.comparePassword(password);
   if (!valid) throw new ApiError(401, 'Invalid email or password');
@@ -101,6 +105,7 @@ export const createUserByAdmin = async (data, role) => {
     name: data.name,
     email: data.email,
     password: data.password,
+    authProvider: 'local',
     role,
     rollNumber: data.rollNumber,
     branch: data.branch,

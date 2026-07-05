@@ -40,6 +40,9 @@ const adminNav = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
   { to: '/admin/users', icon: User, label: 'Users' },
   { to: '/admin/companies', icon: Briefcase, label: 'Companies' },
+  { to: '/admin/drives', icon: FileText, label: 'Drives' },
+  { to: '/admin/applications', icon: FileText, label: 'Applications' },
+  { to: '/admin/interviews', icon: Calendar, label: 'Interviews' },
   { to: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
 ]
 

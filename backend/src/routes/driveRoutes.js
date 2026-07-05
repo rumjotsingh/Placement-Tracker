@@ -9,6 +9,14 @@ import { ROLES } from '../constants/index.js';
 const router = Router();
 
 router.get('/', paginationQuery, validate, driveController.listDrives);
+router.get(
+  '/:id/eligibility',
+  authenticate,
+  authorize(ROLES.STUDENT),
+  mongoIdParam('id'),
+  validate,
+  driveController.getEligibility
+);
 router.get('/:id', mongoIdParam('id'), validate, driveController.getDrive);
 router.get(
   '/:id/applicants',
@@ -34,8 +42,18 @@ router.put(
   authenticate,
   authorize(ROLES.COORDINATOR, ROLES.ADMIN),
   mongoIdParam('id'),
+  driveValidator,
   validate,
   driveController.updateDrive
+);
+
+router.delete(
+  '/:id',
+  authenticate,
+  authorize(ROLES.COORDINATOR, ROLES.ADMIN),
+  mongoIdParam('id'),
+  validate,
+  driveController.deleteDrive
 );
 
 router.patch(

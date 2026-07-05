@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { ChartTooltip } from '@/components/shared/ChartTooltip'
 import { dashboardApi } from '@/services'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { StatCard } from '@/components/shared/StatCard'
@@ -41,7 +42,7 @@ export default function AdminDashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#30363D" />
                 <XAxis dataKey="name" stroke="#8B949E" fontSize={11} />
                 <YAxis stroke="#8B949E" fontSize={12} />
-                <Tooltip contentStyle={{ background: '#1C2128', border: '1px solid #30363D', borderRadius: 8 }} />
+                <ChartTooltip variant="bar" />
                 <Bar dataKey="count" fill="#2EA043" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -61,7 +62,7 @@ export default function AdminDashboard() {
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ background: '#1C2128', border: '1px solid #30363D', borderRadius: 8 }} />
+                <ChartTooltip variant="pie" />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>

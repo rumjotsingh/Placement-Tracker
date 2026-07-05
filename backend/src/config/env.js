@@ -20,6 +20,10 @@ const env = {
     apiSecret: process.env.CLOUD_API_SECERT,
   },
   googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  googleCallbackUrl:
+    process.env.GOOGLE_CALLBACK_URL ||
+    `http://localhost:${process.env.PORT || 8080}/api/auth/google/callback`,
 };
 
 export default env;

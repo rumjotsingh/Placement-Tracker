@@ -48,6 +48,8 @@ export interface StudentProfile {
   githubUsername?: string
   leetcodeUsername?: string
   codeforcesUsername?: string
+  codechefUsername?: string
+  geeksforgeeksUsername?: string
   profileImage?: string
   portfolioSlug?: string
 }
@@ -90,12 +92,23 @@ export interface PlacementDrive {
   createdAt: string
 }
 
+export interface DriveEligibility {
+  eligible: boolean
+  reasons: string[]
+  student?: {
+    cgpa: number | null
+    branch: string | null
+    hasResume: boolean
+  }
+}
+
 export interface Application {
   _id: string
   student: User
   drive: PlacementDrive
   status: string
   withdrawn: boolean
+  statusHistory?: { status: string; changedAt: string; changedBy?: string }[]
   createdAt: string
   updatedAt: string
 }
@@ -132,7 +145,36 @@ export interface CodingStats {
     rating: number
     rank: string
     maxRating: number
+    maxRank?: string
     contests: number
+    totalSolved: number
+    easySolved: number
+    mediumSolved: number
+    hardSolved: number
+  }
+  codechef?: {
+    rating: number
+    maxRating: number
+    globalRank: number
+    countryRank: number
+    stars: string
+    name?: string
+    countryName?: string
+    problemsSolved: number
+    contests: number
+  }
+  geeksforgeeks?: {
+    totalSolved: number
+    codingScore: number
+    monthlyScore: number
+    instituteRank: number
+    easySolved: number
+    mediumSolved: number
+    hardSolved: number
+    schoolSolved: number
+    basicSolved: number
+    currentStreak: number
+    maxStreak: number
   }
   lastSyncedAt?: string
 }

@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { FileText, Trophy, Calendar, Briefcase, Code2, TrendingUp, ArrowUpRight, Clock, Building2 } from 'lucide-react'
-import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from 'recharts'
+import { XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from 'recharts'
+import { ChartTooltip } from '@/components/shared/ChartTooltip'
 import { Link } from 'react-router-dom'
 import { dashboardApi } from '@/services'
 import { StatCard } from '@/components/shared/StatCard'
@@ -148,10 +149,7 @@ export default function StudentDashboard() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#30363D" vertical={false} />
                   <XAxis dataKey="day" stroke="#8B949E" fontSize={12} axisLine={false} tickLine={false} />
                   <YAxis stroke="#8B949E" fontSize={12} axisLine={false} tickLine={false} />
-                  <Tooltip 
-                    contentStyle={{ background: '#1C2128', border: '1px solid #30363D', borderRadius: 8 }}
-                    labelStyle={{ color: '#F0F6FC' }}
-                  />
+                  <ChartTooltip variant="area" />
                   <Area type="monotone" dataKey="problems" stroke="#2EA043" strokeWidth={2} fillOpacity={1} fill="url(#colorProblems)" />
                 </AreaChart>
               </ResponsiveContainer>
@@ -183,7 +181,7 @@ export default function StudentDashboard() {
                     >
                       {codingData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
                     </Pie>
-                    <Tooltip contentStyle={{ background: '#1C2128', border: '1px solid #30363D', borderRadius: 8 }} />
+                    <ChartTooltip variant="pie" />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="flex-1 space-y-3">

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { authApi } from '@/services'
 import { useAuthStore } from '@/stores/authStore'
+import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton'
 
 const schema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -22,8 +23,14 @@ type FormData = z.infer<typeof schema>
 export default function LoginPage() {
   const [showPass, setShowPass] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [searchParams] = useSearchParams()
   const { setAuth } = useAuthStore()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const error = searchParams.get('error')
+    if (error) toast.error(error)
+  }, [searchParams])
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -108,7 +115,18 @@ export default function LoginPage() {
 
           <div className="mb-8">
             <h2 className="text-3xl font-bold mb-2">Welcome back</h2>
-            <p className="text-text-secondary">Enter your credentials to access your account</p>
+            <p className="text-text-secondary">Sign in with Google or use your email and password</p>
+          </div>
+
+          <GoogleLoginButton className="mb-6" />
+
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-text-secondary">Or continue with email</span>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">

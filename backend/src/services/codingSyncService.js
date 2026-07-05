@@ -6,6 +6,8 @@ import {
   fetchGitHubStats,
   fetchLeetCodeStats,
   fetchCodeforcesStats,
+  fetchCodeChefStats,
+  fetchGeeksforGeeksStats,
 } from './codingService.js';
 import { createNotification } from './notificationService.js';
 import { NOTIFICATION_TYPES } from '../constants/index.js';
@@ -16,17 +18,30 @@ const getOrCreateStats = async (userId) => {
   return stats;
 };
 
-const syncDSAFromLeetCode = async (userId, leetcode) => {
+const syncDSAFromStats = async (userId, stats) => {
   let dsa = await DSAProgress.findOne({ user: userId });
   if (!dsa) dsa = await DSAProgress.create({ user: userId });
+
+  const lc = stats.leetcode || {};
+  const cf = stats.codeforces || {};
+  const gfg = stats.geeksforgeeks || {};
+
+  const easy =
+    (lc.easySolved || 0) +
+    (cf.easySolved || 0) +
+    (gfg.easySolved || 0) +
+    (gfg.schoolSolved || 0) +
+    (gfg.basicSolved || 0);
+  const medium = (lc.mediumSolved || 0) + (cf.mediumSolved || 0) + (gfg.mediumSolved || 0);
+  const hard = (lc.hardSolved || 0) + (cf.hardSolved || 0) + (gfg.hardSolved || 0);
 
   const prevEasy = dsa.easy;
   const prevMedium = dsa.medium;
   const prevHard = dsa.hard;
 
-  dsa.easy = leetcode.easySolved;
-  dsa.medium = leetcode.mediumSolved;
-  dsa.hard = leetcode.hardSolved;
+  dsa.easy = easy;
+  dsa.medium = medium;
+  dsa.hard = hard;
 
   const now = new Date();
   const weekKey = `${now.getFullYear()}-W${Math.ceil(now.getDate() / 7)}`;
@@ -34,17 +49,17 @@ const syncDSAFromLeetCode = async (userId, leetcode) => {
 
   dsa.weeklyGrowth.push({
     week: weekKey,
-    easy: leetcode.easySolved - prevEasy,
-    medium: leetcode.mediumSolved - prevMedium,
-    hard: leetcode.hardSolved - prevHard,
+    easy: easy - prevEasy,
+    medium: medium - prevMedium,
+    hard: hard - prevHard,
     recordedAt: now,
   });
 
   dsa.monthlyGrowth.push({
     month: monthKey,
-    easy: leetcode.easySolved,
-    medium: leetcode.mediumSolved,
-    hard: leetcode.hardSolved,
+    easy,
+    medium,
+    hard,
     recordedAt: now,
   });
 
@@ -85,7 +100,7 @@ export const syncLeetCode = async (userId) => {
   stats.lastSyncedAt = new Date();
   await stats.save();
 
-  await syncDSAFromLeetCode(userId, leetcode);
+  await syncDSAFromStats(userId, stats);
 
   await createNotification({
     userId,
@@ -109,11 +124,57 @@ export const syncCodeforces = async (userId) => {
   stats.lastSyncedAt = new Date();
   await stats.save();
 
+  await syncDSAFromStats(userId, stats);
+
   await createNotification({
     userId,
     type: NOTIFICATION_TYPES.PROFILE_SYNC_COMPLETED,
     title: 'Codeforces Sync Complete',
     message: 'Your Codeforces profile has been synced',
+  });
+
+  return stats;
+};
+
+export const syncCodeChef = async (userId) => {
+  const profile = await StudentProfile.findOne({ user: userId });
+  if (!profile?.codechefUsername) throw new ApiError(400, 'CodeChef username not set in profile');
+
+  const codechef = await fetchCodeChefStats(profile.codechefUsername);
+  const stats = await getOrCreateStats(userId);
+  stats.codechef = codechef;
+  stats.lastSyncedAt = new Date();
+  await stats.save();
+
+  await createNotification({
+    userId,
+    type: NOTIFICATION_TYPES.PROFILE_SYNC_COMPLETED,
+    title: 'CodeChef Sync Complete',
+    message: 'Your CodeChef profile has been synced',
+  });
+
+  return stats;
+};
+
+export const syncGeeksforGeeks = async (userId) => {
+  const profile = await StudentProfile.findOne({ user: userId });
+  if (!profile?.geeksforgeeksUsername) {
+    throw new ApiError(400, 'GeeksforGeeks username not set in profile');
+  }
+
+  const geeksforgeeks = await fetchGeeksforGeeksStats(profile.geeksforgeeksUsername);
+  const stats = await getOrCreateStats(userId);
+  stats.geeksforgeeks = geeksforgeeks;
+  stats.lastSyncedAt = new Date();
+  await stats.save();
+
+  await syncDSAFromStats(userId, stats);
+
+  await createNotification({
+    userId,
+    type: NOTIFICATION_TYPES.PROFILE_SYNC_COMPLETED,
+    title: 'GeeksforGeeks Sync Complete',
+    message: 'Your GeeksforGeeks profile has been synced',
   });
 
   return stats;
@@ -136,9 +197,7 @@ export const syncAllProfiles = async (userId) => {
 
   if (profile.leetcodeUsername) {
     try {
-      const leetcode = await fetchLeetCodeStats(profile.leetcodeUsername);
-      stats.leetcode = leetcode;
-      await syncDSAFromLeetCode(userId, leetcode);
+      stats.leetcode = await fetchLeetCodeStats(profile.leetcodeUsername);
     } catch (e) {
       errors.push({ platform: 'leetcode', message: e.message });
     }
@@ -152,8 +211,26 @@ export const syncAllProfiles = async (userId) => {
     }
   }
 
+  if (profile.codechefUsername) {
+    try {
+      stats.codechef = await fetchCodeChefStats(profile.codechefUsername);
+    } catch (e) {
+      errors.push({ platform: 'codechef', message: e.message });
+    }
+  }
+
+  if (profile.geeksforgeeksUsername) {
+    try {
+      stats.geeksforgeeks = await fetchGeeksforGeeksStats(profile.geeksforgeeksUsername);
+    } catch (e) {
+      errors.push({ platform: 'geeksforgeeks', message: e.message });
+    }
+  }
+
   stats.lastSyncedAt = new Date();
   await stats.save();
+
+  await syncDSAFromStats(userId, stats);
 
   await createNotification({
     userId,
