@@ -18,7 +18,7 @@ export function GoogleLoginButton({
     <Button
       type="button"
       variant="outline"
-      className={`w-full h-12 gap-3 bg-surface hover:bg-muted border-border ${className || ''}`}
+      className={`w-full h-12 gap-3 bg-card hover:bg-surface border-border ${className || ''}`}
       onClick={handleGoogleLogin}
     >
       <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">

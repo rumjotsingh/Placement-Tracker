@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
+import { AuthBootstrap } from '@/components/auth/AuthBootstrap'
 import { ProtectedRoute, PublicRoute } from '@/components/shared/ProtectedRoute'
 import { StudentLayout, CoordinatorLayout, AdminLayout } from '@/layouts/DashboardLayout'
 
@@ -40,7 +41,8 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <AuthBootstrap>
+        <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
 
@@ -97,8 +99,9 @@ export default function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </BrowserRouter>
-      <Toaster theme="dark" position="top-right" richColors />
+        </BrowserRouter>
+      </AuthBootstrap>
+      <Toaster theme="light" position="top-right" richColors />
     </QueryClientProvider>
   )
 }

@@ -8,7 +8,7 @@ import { DashboardSkeleton } from '@/components/shared/LoadingSkeleton'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, Briefcase, FileText, Trophy, TrendingUp } from 'lucide-react'
 
-const COLORS = ['#2EA043', '#238636', '#58A6FF', '#D29922', '#F85149', '#8B949E']
+const COLORS = ['#2563EB', '#1D4ED8', '#60A5FA', '#D97706', '#DC2626', '#6B7280']
 
 export default function AdminDashboard() {
   const { data, isLoading } = useQuery({
@@ -43,7 +43,7 @@ export default function AdminDashboard() {
                 <XAxis dataKey="name" stroke="#8B949E" fontSize={11} />
                 <YAxis stroke="#8B949E" fontSize={12} />
                 <ChartTooltip variant="bar" />
-                <Bar dataKey="count" fill="#2EA043" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" fill="#2563EB" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

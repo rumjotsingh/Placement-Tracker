@@ -27,9 +27,9 @@ export default function StudentDashboard() {
   const cards = data?.cards
 
   const codingData = [
-    { name: 'Easy', value: data?.codingStats?.leetcode?.easySolved || 0, fill: '#2EA043' },
-    { name: 'Medium', value: data?.codingStats?.leetcode?.mediumSolved || 0, fill: '#D29922' },
-    { name: 'Hard', value: data?.codingStats?.leetcode?.hardSolved || 0, fill: '#F85149' },
+    { name: 'Easy', value: data?.codingStats?.leetcode?.easySolved || 0, fill: '#16A34A' },
+    { name: 'Medium', value: data?.codingStats?.leetcode?.mediumSolved || 0, fill: '#D97706' },
+    { name: 'Hard', value: data?.codingStats?.leetcode?.hardSolved || 0, fill: '#DC2626' },
   ]
 
   const weeklyData = [
@@ -59,7 +59,7 @@ export default function StudentDashboard() {
       >
         <div>
           <h1 className="text-2xl lg:text-3xl font-bold">
-            {greeting()}, <span className="gradient-accent">{user?.name?.split(' ')[0]}</span> 👋
+            {greeting()}, <span className="text-accent">{user?.name?.split(' ')[0]}</span> 👋
           </h1>
           <p className="text-text-secondary mt-1">Here's what's happening with your placement journey</p>
         </div>
@@ -142,15 +142,15 @@ export default function StudentDashboard() {
                 <AreaChart data={weeklyData}>
                   <defs>
                     <linearGradient id="colorProblems" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#2EA043" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#2EA043" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#2563EB" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#2563EB" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#30363D" vertical={false} />
                   <XAxis dataKey="day" stroke="#8B949E" fontSize={12} axisLine={false} tickLine={false} />
                   <YAxis stroke="#8B949E" fontSize={12} axisLine={false} tickLine={false} />
                   <ChartTooltip variant="area" />
-                  <Area type="monotone" dataKey="problems" stroke="#2EA043" strokeWidth={2} fillOpacity={1} fill="url(#colorProblems)" />
+                  <Area type="monotone" dataKey="problems" stroke="#2563EB" strokeWidth={2} fillOpacity={1} fill="url(#colorProblems)" />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>

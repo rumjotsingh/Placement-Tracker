@@ -71,25 +71,24 @@ export function DashboardLayout({ navItems, portalLabel }: DashboardLayoutProps)
 
   const Sidebar = () => (
     <aside className={cn(
-      'flex flex-col h-full bg-surface/50 backdrop-blur-sm border-r border-border transition-all duration-300',
+      'flex flex-col h-full bg-card border-r border-border transition-all duration-300',
       collapsed ? 'w-[68px]' : 'w-64'
     )}>
-      {/* Logo */}
       <div className="flex items-center justify-between p-4 h-16 border-b border-border">
         {!collapsed && (
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center">
+            <div className="h-8 w-8 rounded-[10px] bg-accent flex items-center justify-center">
               <span className="text-white font-bold text-sm">P</span>
             </div>
             <div>
-              <span className="font-bold text-sm">PlaceTrack</span>
+              <span className="font-bold text-sm text-text-primary">PlaceTrack</span>
               <span className="text-accent font-bold text-sm">Pro</span>
               <p className="text-text-secondary text-[10px] -mt-0.5">{portalLabel}</p>
             </div>
           </div>
         )}
         {collapsed && (
-          <div className="h-8 w-8 mx-auto rounded-lg bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center">
+          <div className="h-8 w-8 mx-auto rounded-[10px] bg-accent flex items-center justify-center">
             <span className="text-white font-bold text-sm">P</span>
           </div>
         )}
@@ -110,7 +109,7 @@ export function DashboardLayout({ navItems, portalLabel }: DashboardLayoutProps)
               'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 relative group',
               isActive
                 ? 'bg-accent/10 text-accent'
-                : 'text-text-secondary hover:text-text-primary hover:bg-muted'
+                : 'text-text-secondary hover:text-text-primary hover:bg-surface'
             )}
           >
             {({ isActive }) => (
@@ -135,10 +134,10 @@ export function DashboardLayout({ navItems, portalLabel }: DashboardLayoutProps)
 
       {/* User Info */}
       <div className="p-3 border-t border-border">
-        <div className={cn('flex items-center gap-3 p-2 rounded-xl hover:bg-muted transition-colors', collapsed && 'justify-center')}>
+        <div className={cn('flex items-center gap-3 p-2 rounded-xl hover:bg-surface transition-colors', collapsed && 'justify-center')}>
           <Avatar className="h-9 w-9 border border-border">
             <AvatarImage src="" />
-            <AvatarFallback className="bg-gradient-to-br from-accent/20 to-accent/5 text-accent text-xs font-bold">
+            <AvatarFallback className="bg-accent/10 text-accent text-xs font-bold">
               {user ? getInitials(user.name) : '?'}
             </AvatarFallback>
           </Avatar>
@@ -159,7 +158,7 @@ export function DashboardLayout({ navItems, portalLabel }: DashboardLayoutProps)
   )
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="flex h-screen bg-surface overflow-hidden">
       {/* Desktop Sidebar */}
       <div className="hidden lg:flex">
         <Sidebar />
@@ -174,7 +173,7 @@ export function DashboardLayout({ navItems, portalLabel }: DashboardLayoutProps)
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 lg:hidden"
           >
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+            <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
             <motion.div
               initial={{ x: -280 }}
               animate={{ x: 0 }}
@@ -191,14 +190,14 @@ export function DashboardLayout({ navItems, portalLabel }: DashboardLayoutProps)
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Header */}
-        <header className="flex items-center justify-between h-16 px-4 border-b border-border bg-surface/30 backdrop-blur-sm lg:px-6">
+        <header className="flex items-center justify-between h-16 px-4 border-b border-border bg-card lg:px-6">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileOpen(true)}>
               <Menu className="h-5 w-5" />
             </Button>
             <div className="hidden sm:flex relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary" />
-              <Input placeholder="Search..." className="pl-9 w-64 h-9 bg-muted border-0" />
+              <Input placeholder="Search..." className="pl-9 w-64 h-9 bg-surface border-border" />
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -210,7 +209,7 @@ export function DashboardLayout({ navItems, portalLabel }: DashboardLayoutProps)
             >
               <Bell className="h-5 w-5" />
               {unread ? (
-                <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-accent rounded-full ring-2 ring-surface" />
+                <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-accent rounded-full ring-2 ring-card" />
               ) : null}
             </Button>
           </div>

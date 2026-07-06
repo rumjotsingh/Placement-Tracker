@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuthStore } from '@/stores/authStore'
 import { authApi } from '@/services'
+import { getDashboardPath } from '@/lib/auth'
 
 export default function GoogleCallbackPage() {
   const [searchParams] = useSearchParams()
@@ -37,10 +38,10 @@ export default function GoogleCallbackPage() {
 
         const redirect =
           role === 'ADMIN' || user.role === 'ADMIN'
-            ? '/admin'
+            ? getDashboardPath('ADMIN')
             : role === 'COORDINATOR' || user.role === 'COORDINATOR'
-              ? '/coordinator'
-              : '/student'
+              ? getDashboardPath('COORDINATOR')
+              : getDashboardPath('STUDENT')
 
         navigate(redirect, { replace: true })
       } catch {

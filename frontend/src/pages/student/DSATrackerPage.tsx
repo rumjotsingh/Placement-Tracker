@@ -29,7 +29,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
 
-const DIFFICULTY_COLORS = { Easy: '#2EA043', Medium: '#D29922', Hard: '#F85149' }
+const DIFFICULTY_COLORS = { Easy: '#16A34A', Medium: '#D97706', Hard: '#DC2626' }
 
 const DSA_PLATFORMS = CODING_PLATFORMS.filter((p) =>
   ['leetcode', 'codeforces', 'codechef', 'geeksforgeeks'].includes(p.id)
@@ -394,7 +394,7 @@ export default function DSATrackerPage() {
                   <XAxis dataKey="week" stroke="#8B949E" fontSize={10} />
                   <YAxis stroke="#8B949E" fontSize={12} />
                   <ChartTooltip variant="line" />
-                  <Line type="monotone" dataKey="easy" stroke="#2EA043" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="easy" stroke="#16A34A" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="medium" stroke="#D29922" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="hard" stroke="#F85149" strokeWidth={2} dot={false} />
                 </LineChart>
@@ -419,7 +419,7 @@ export default function DSATrackerPage() {
                   <XAxis dataKey="month" stroke="#8B949E" fontSize={10} />
                   <YAxis stroke="#8B949E" fontSize={12} />
                   <ChartTooltip variant="bar" />
-                  <Bar dataKey="easy" fill="#2EA043" radius={[2, 2, 0, 0]} />
+                  <Bar dataKey="easy" fill="#16A34A" radius={[2, 2, 0, 0]} />
                   <Bar dataKey="medium" fill="#D29922" radius={[2, 2, 0, 0]} />
                   <Bar dataKey="hard" fill="#F85149" radius={[2, 2, 0, 0]} />
                 </BarChart>

@@ -20,13 +20,12 @@ export function StatCard({ title, value, icon: Icon, trend, subtitle, className 
       whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
     >
-      <Card className={cn('card-hover overflow-hidden relative group', className)}>
-        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-        <CardContent className="p-5 relative">
+      <Card className={cn('card-hover overflow-hidden', className)}>
+        <CardContent className="p-5">
           <div className="flex items-start justify-between">
             <div className="space-y-2">
               <p className="text-sm text-text-secondary font-medium">{title}</p>
-              <p className="text-3xl font-bold tracking-tight">{value}</p>
+              <p className="text-3xl font-bold tracking-tight text-text-primary">{value}</p>
               {subtitle && <p className="text-xs text-text-secondary">{subtitle}</p>}
               {trend !== undefined && (
                 <div className={cn('flex items-center gap-1 text-xs font-medium', {
@@ -39,7 +38,7 @@ export function StatCard({ title, value, icon: Icon, trend, subtitle, className 
                 </div>
               )}
             </div>
-            <div className="rounded-xl bg-gradient-to-br from-accent/20 to-accent/5 p-3 group-hover:scale-110 transition-transform duration-300">
+            <div className="rounded-xl bg-accent/10 p-3">
               <Icon className="h-5 w-5 text-accent" />
             </div>
           </div>

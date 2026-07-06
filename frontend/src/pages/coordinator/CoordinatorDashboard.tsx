@@ -93,7 +93,7 @@ export default function CoordinatorDashboard() {
                   <XAxis dataKey="name" stroke="#8B949E" fontSize={11} />
                   <YAxis stroke="#8B949E" fontSize={12} />
                   <ChartTooltip variant="bar" />
-                  <Bar dataKey="count" fill="#2EA043" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="count" fill="#2563EB" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : <p className="text-text-secondary text-sm text-center py-8">No data yet</p>}
