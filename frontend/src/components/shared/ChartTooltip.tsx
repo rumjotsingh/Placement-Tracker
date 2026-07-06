@@ -1,28 +1,33 @@
-import { Tooltip } from 'recharts'
+import { Tooltip } from "recharts";
+import type { TooltipProps } from "recharts";
 
 export const CHART_TOOLTIP_STYLE = {
-  background: '#FFFFFF',
-  border: '1px solid #E5E7EB',
+  background: "#FFFFFF",
+  border: "1px solid #E5E7EB",
   borderRadius: 8,
-  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.06)',
-}
+  boxShadow: "0 4px 6px -1px rgba(0,0,0,0.06)",
+};
 
 type ChartTooltipProps = {
-  variant?: 'bar' | 'line' | 'pie' | 'area'
-}
+  variant?: "bar" | "line" | "pie" | "area";
+};
 
-export function ChartTooltip({ variant = 'bar' }: ChartTooltipProps) {
-  const cursor =
-    variant === 'bar' || variant === 'pie'
+export function ChartTooltip({ variant = "bar" }: ChartTooltipProps) {
+  const cursor: TooltipProps["cursor"] =
+    variant === "bar" || variant === "pie"
       ? false
-      : { stroke: '#E5E7EB', strokeWidth: 1, strokeDasharray: '4 4' }
+      : {
+          stroke: "#E5E7EB",
+          strokeWidth: 1,
+          strokeDasharray: "4 4",
+        };
 
   return (
     <Tooltip
       cursor={cursor}
       contentStyle={CHART_TOOLTIP_STYLE}
-      labelStyle={{ color: '#111827' }}
-      itemStyle={{ color: '#6B7280' }}
+      labelStyle={{ color: "#111827" }}
+      itemStyle={{ color: "#6B7280" }}
     />
-  )
+  );
 }
